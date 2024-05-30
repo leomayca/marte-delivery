@@ -18,13 +18,21 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useForm, FormProvider, useWatch } from 'react-hook-form';
 
-const Form: React.FC = () => {
+interface FormProps {
+  formId: string;
+}
+
+const Form: React.FC<FormProps> = ({ formId }) => {
   const form = useForm();
   const planet = useWatch({ control: form.control, name: "planet" });
 
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
+
   return (
     <FormProvider {...form}>
-      <form id="create" className="space-y-6">
+      <form id={formId} onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -50,9 +58,9 @@ const Form: React.FC = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="t1">Armazém</SelectItem>
-                        <SelectItem value="t2">Fábrica</SelectItem>
-                        <SelectItem value="t3">Ponto de Distribuição</SelectItem>
+                        <SelectItem value="storage">Armazém</SelectItem>
+                        <SelectItem value="factory">Fábrica</SelectItem>
+                        <SelectItem value="distributionPoint">Ponto de Distribuição</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -70,7 +78,7 @@ const Form: React.FC = () => {
               <FormControl>
                 <div className="flex flex-col	items-start">
                   <Label className="mb-2">Planeta</Label>
-                  <RadioGroup onValueChange={field.onChange} value={field.value || 'earth'} className="flex space-x-4">
+                  <RadioGroup onValueChange={field.onChange} value={field.value || ''} className="flex space-x-4">
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="earth" id="r1" />
                       <Label htmlFor="r1">Terra</Label>
