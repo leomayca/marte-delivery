@@ -66,6 +66,12 @@
     }
   }
 
+  #root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
   @layer base {
     * {
       @apply border-border;
@@ -74,3 +80,22 @@
       @apply bg-background text-foreground;
     }
   }
+
+  .card {
+    transition: border-color 0.3s, background-color 0.3s;
+  }
+  
+  .card.selected {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+  }
+  
+  .card-header h2 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .card-body p {
+    margin: 4px 0;
+  }
+  

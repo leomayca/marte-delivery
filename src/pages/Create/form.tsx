@@ -18,16 +18,32 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useForm, FormProvider, useWatch } from 'react-hook-form';
 
-interface FormProps {
-  formId: string;
+interface Address {
+  id: number;
+  addressName: string;
+  addressType: 'storage' | 'factory' | 'distributionPoint';
+  planet: 'earth' | 'mars';
+  batchCode?: string;
+  cep?: string;
+  country?: string;
+  state?: string;
+  city?: string;
+  address?: string;
+  number?: string;
+  complement?: string;
 }
 
-const Form: React.FC<FormProps> = ({ formId }) => {
-  const form = useForm();
+interface FormProps {
+  formId: string;
+  setAddresses: (newAddress: Address) => void;
+}
+
+const Form: React.FC<FormProps> = ({ formId, setAddresses }) => {
+  const form = useForm<Address>();
   const planet = useWatch({ control: form.control, name: "planet" });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = (data: Address) => {
+    setAddresses(data);
   };
 
   return (

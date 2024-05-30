@@ -10,23 +10,43 @@ import {
 } from "@/components/ui/dialog";
 import Form from './form';
 
-interface CreateProps {
-  formId: string;
+interface Address {
+  id: number;
+  addressName: string;
+  addressType: 'storage' | 'factory' | 'distributionPoint';
+  planet: 'earth' | 'mars';
+  batchCode?: string;
+  cep?: string;
+  country?: string;
+  state?: string;
+  city?: string;
+  address?: string;
+  number?: string;
+  complement?: string;
 }
 
-const Create: React.FC<CreateProps> = ({ formId }) => {
+interface CreateProps {
+  formId: string;
+  setAddresses: React.Dispatch<React.SetStateAction<Address[]>>;
+}
+
+const Create: React.FC<CreateProps> = ({ formId, setAddresses }) => {
+
+  const handleSave = (newAddress: Address) => {
+    setAddresses(prev => [...prev, { ...newAddress, id: Date.now() }]);
+  };
 
   return (
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">Cadastrar Entrega</Button>
+          <Button>Cadastrar Entrega</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-4xl">
           <DialogHeader>
             <DialogTitle>Cadastrar Entrega</DialogTitle>
           </DialogHeader>
-            <Form formId={formId}/>
+            <Form formId={formId} setAddresses={handleSave}/>
           <DialogFooter>
             <Button form={formId} type="submit">Salvar</Button>
           </DialogFooter>
