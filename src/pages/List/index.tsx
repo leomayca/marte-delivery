@@ -49,28 +49,29 @@ const List: React.FC = () => {
     }
   };
 
+  const handleDelete = (id: number) => {
+    setAddresses(addresses.filter(e => e.id != id))
+  }
+
   return (
     <div className="">
       <div className="flex justify-between">
         <h1 className="text-2xl font-bold mb-4">Lista de Endereços</h1>
-        <Create formId={selectedCardId == null ? "create" : "edit"} setAddresses={setAddresses} />
+        <Create formId={selectedCardId == null ? "create" : "edit"} setAddresses={setAddresses} data={addresses.find(e => e.id == selectedCardId)} />
       </div>
       <div className="card-list grid grid-cols-1 gap-4">
-      {addresses.map(addresseData => (
-        <Card
-          key={addresseData.id}
-          {...addresseData}
-          onSelect={handleSelect}
-          isSelected={addresseData.id === selectedCardId}
-        />
-      ))}
-    </div>
+        {addresses.map(addresseData => (
+          <Card
+            key={addresseData.id}
+            {...addresseData}
+            onSelect={handleSelect}
+            onDelete={handleDelete}
+            isSelected={addresseData.id === selectedCardId}
+          />
+        ))}
+      </div>
     </div>
   );
-
-  function handleDelete(id: number) {
-    console.log(`Delete address with ID ${id}`);
-  }
 };
 
 export default List;

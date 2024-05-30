@@ -17,6 +17,8 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useForm, FormProvider, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
 interface Address {
   id: number;
@@ -36,10 +38,32 @@ interface Address {
 interface FormProps {
   formId: string;
   setAddresses: (newAddress: Address) => void;
+  data: Address | null
 }
 
-const Form: React.FC<FormProps> = ({ formId, setAddresses }) => {
-  const form = useForm<Address>();
+const addressSchemaEarth = z.object({
+  addressName: z.string({ message: 'Campo obrigatório não preenchido' }),
+  addressType: z.enum(['storage', 'factory', 'distributionPoint'], { message: 'Campo obrigatório não preenchido' }),
+  planet: z.enum(['earth', 'mars'], { message: 'Campo obrigatório não preenchido' }),
+  cep: z.string({ message: 'Campo obrigatório não preenchido' }),
+  country: z.string({ message: 'Campo obrigatório não preenchido' }),
+  state: z.string({ message: 'Campo obrigatório não preenchido' }),
+  city: z.string({ message: 'Campo obrigatório não preenchido' }),
+  address: z.string({ message: 'Campo obrigatório não preenchido' }),
+  number: z.string({ message: 'Campo obrigatório não preenchido' })
+});
+
+const addressSchemaMars = z.object({
+  addressName: z.string({ message: 'Campo obrigatório não preenchido' }),
+  addressType: z.enum(['storage', 'factory', 'distributionPoint'], { message: 'Campo obrigatório não preenchido' }),
+  planet: z.enum(['earth', 'mars'], { message: 'Campo obrigatório não preenchido' }),
+  batchCode: z.string({ message: 'Campo obrigatório não preenchido' })
+});
+
+const Form: React.FC<FormProps> = ({ formId, setAddresses, data }) => {
+  const form = useForm<Address>({
+    defaultValues: data || {}
+  });
   const planet = useWatch({ control: form.control, name: "planet" });
 
   const onSubmit = (data: Address) => {

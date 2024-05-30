@@ -28,9 +28,10 @@ interface Address {
 interface CreateProps {
   formId: string;
   setAddresses: React.Dispatch<React.SetStateAction<Address[]>>;
+  data: Address | null
 }
 
-const Create: React.FC<CreateProps> = ({ formId, setAddresses }) => {
+const Create: React.FC<CreateProps> = ({ formId, setAddresses, data }) => {
 
   const handleSave = (newAddress: Address) => {
     setAddresses(prev => [...prev, { ...newAddress, id: Date.now() }]);
@@ -40,13 +41,13 @@ const Create: React.FC<CreateProps> = ({ formId, setAddresses }) => {
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button>Cadastrar Entrega</Button>
+          <Button>{formId == 'create' ? 'Cadastrar Entrega' : 'Editar Entrega'}</Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-4xl">
           <DialogHeader>
-            <DialogTitle>Cadastrar Entrega</DialogTitle>
+            <DialogTitle>{formId == 'create' ? 'Cadastrar Entrega' : 'Editar Entrega'}</DialogTitle>
           </DialogHeader>
-            <Form formId={formId} setAddresses={handleSave}/>
+          <Form formId={formId} setAddresses={handleSave} data={data} />
           <DialogFooter>
             <Button form={formId} type="submit">Salvar</Button>
           </DialogFooter>

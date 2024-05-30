@@ -1,5 +1,6 @@
 import React from "react";
 import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
 
 interface Address {
   id: number;
@@ -15,10 +16,23 @@ interface Address {
   number?: string;
   complement?: string;
   onSelect: (id: number) => void;
+  onDelete: (id: number) => void;
   isSelected: boolean;
 }
 
-const Card: React.FC<Address> = ({ id, addressName, addressType, planet, batchCode, cep, country, state, city, address, number, complement, onSelect, isSelected }) => {
+const Card: React.FC<Address> = ({ id, addressName, addressType, planet, batchCode, cep, country, state, city, address, number, complement, onSelect, onDelete, isSelected }) => {
+
+  const translatedPlanet: { [key: string]: string } = {
+    mars: "Marte",
+    earth: "Terra"
+  }
+
+  const translatedType: { [key: string]: string } = {
+    storage: "Armazém",
+    factory: "Fábrica",
+    distributionPoint: "Ponto de Distribuição"
+  }
+
   return (
     <div
       className={cn("card p-4 border rounded-lg shadow-md cursor-pointer", {
@@ -27,22 +41,28 @@ const Card: React.FC<Address> = ({ id, addressName, addressType, planet, batchCo
       })}
       onClick={() => onSelect(id)}
     >
-      <div className="card-header mb-2">
+      <div className="mb-2 flex justify-between">
         <h2 className="text-lg font-semibold">{addressName}</h2>
+        <Button onClick={() => onDelete(id)}>Excluir</Button>
       </div>
-      <div className="card-body">
-        <p><strong>Tipo de Endereço:</strong> {addressType}</p>
-        <p><strong>Planeta:</strong> {planet}</p>
-        {planet === 'mars' && <p><strong>Código do Lote:</strong> {batchCode}</p>}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <strong>Tipo de Endereço:</strong> {translatedType[addressType]}
+        </div>
+        <div>
+          <strong>Planeta:</strong> {translatedPlanet[planet]}
+        </div>
+
+        {planet === 'mars' && <div><strong>Código do Lote:</strong> {batchCode}</div>}
         {planet === 'earth' && (
           <>
-            <p><strong>CEP:</strong> {cep}</p>
-            <p><strong>País:</strong> {country}</p>
-            <p><strong>Estado:</strong> {state}</p>
-            <p><strong>Cidade:</strong> {city}</p>
-            <p><strong>Endereço:</strong> {address}</p>
-            <p><strong>Número:</strong> {number}</p>
-            <p><strong>Complemento:</strong> {complement}</p>
+            <div><strong>CEP:</strong> {cep}</div>
+            <div><strong>País:</strong> {country}</div>
+            <div><strong>Estado:</strong> {state}</div>
+            <div><strong>Cidade:</strong> {city}</div>
+            <div><strong>Endereço:</strong> {address}</div>
+            <div><strong>Número:</strong> {number}</div>
+            {complement && <div><strong>Complemento:</strong> {complement}</div>}
           </>
         )}
       </div>
